@@ -4,7 +4,7 @@ blur-detect-model is a neural network model to detect whether one image is blur 
 
 
 
-## Usage
+## Model Usage
 
 There are three different neural network model in this code:
 
@@ -35,6 +35,20 @@ What's more important is the input-size must be (3 x 224 x 224) if you wanna use
 If you want use the Single Residual Block model, you must add `--res-block` in `train.sh`
 
 If you add nothing , the default model is Single-Conv-Layer Model
+
+And there are many other parameter you can find in `train.py`
+
+### evaluate
+
+Add `-e` or`--evaluate` in `train.sh` and the model will just run evaluating function with validation set
+
+
+
+### Filter Images
+
+When you train the model, you can get many best model step by step named `XXXX.pth.tar`. If you wanna use the best model to select pictures ,you should add `--resume` and the best model package path in `filter.sh`
+
+Similarly, there are many parameters in `filter.py`
 
 
 
