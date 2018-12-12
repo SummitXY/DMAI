@@ -1,54 +1,59 @@
-## Introduction
+# 模糊检测模型压缩版README
 
-blur-detect-model is a neural network model to detect whether one image is blur or clear. The dataset I build with real data from Etalk Stub ( a 1-to-1 online English tutoring platform)
+### main2.py / train.sh
 
+模型训练与测试代码
 
+可选择三个模型之一：
 
-## Model Usage
+1. 单卷积层:
 
-There are three different neural network model in this code:
+   | 可选参数            | 解释                                                  |
+   | ------------------- | ----------------------------------------------------- |
+   | --out-features  int | 单卷积输出channel数                                   |
+   | --kernel-size  int  | 卷积核大小                                            |
+   | --padding  int      | 填充，为了使卷积后图像size不变，需根据kernel-size调节 |
+   | --adam              | 如果添加，使用adam优化器，默认使用SGD-Momentum        |
+   | --max-pool          | 如果添加，使用池化，默认不使用                        |
 
-1. Single Convolution Layer
-2. Single Residual block
-3. ResNet18
+2. 单残差快，加参数`--res-block`
 
-To train one of these models, You should set many parameters in `train.sh`
+3. ResNet18，加参数`--resnet18`
 
-`train.sh` is a shell which can run in Linux directly by typing `./train.sh` in terminal, and you should set parameters in `train.sh` instead of `train.py` as far as possible
+三个模型都有的参数：
 
-### Dataset
+| 可选参数          | 解释                         |
+| ----------------- | ---------------------------- |
+| --lr  float       | learning rate                |
+| --batch-size  int | batch size                   |
+| --data  str       | 训练数据地址                 |
+| --print-freq  int | 输出频率                     |
+| --resume  str     | best model 的路径            |
+| -e                | 只进行测试，需要加`--resume` |
 
-The input data default size is (3 x 144 x 176), but it's easy to change the input-size by adding a resize transform 
-
-### GPU
-
-If you don't have GPU, you'll get a bug when running the code because of the `.cuda`method. So when there is no GPU in your computer , delete all the `.cuda` method
-
-### Train ResNet18 Model
-
-If you want use the ResNet18 model, you must add `--resnet18` in `train.sh`
-
-What's more important is the input-size must be (3 x 224 x 224) if you wanna use pretrained model, and to use the pretrained model , you should add `--pretrained ` in `train.sh`
-
-### Train Single Residual-Block / Conv-Layer Model
-
-If you want use the Single Residual Block model, you must add `--res-block` in `train.sh`
-
-If you add nothing , the default model is Single-Conv-Layer Model
-
-And there are many other parameter you can find in `train.py`
-
-### evaluate
-
-Add `-e` or`--evaluate` in `train.sh` and the model will just run evaluating function with validation set
+> 以上参数设置均在`train.sh`文件设置
 
 
 
-### Filter Images
+### filter.py / filter.sh
 
-When you train the model, you can get many best model step by step named `XXXX.pth.tar`. If you wanna use the best model to select pictures ,you should add `--resume` and the best model package path in `filter.sh`
+使用训练好的模型筛选数据
 
-Similarly, there are many parameters in `filter.py`
+拟采用的best-model:`./best_model.pth.tar`，模型结构与参数：
 
+| 属性         | 值            |
+| ------------ | ------------- |
+| 网络结构     | 单残差快; out-features = 128 |
+| 验证集精度   | 86.65%        |
+| 输入图片大小 | 3 × 144 × 176 |
+| 输入图片存储格式             |![img](/home/dm/Desktop/blurModelForZhaohui/README_IMAGE/structure.png)               |
+| 处理形式             |将高于设定阈值的模糊图片复制到指定文件夹               |
 
+`filter.sh`可选参数：
+
+| 可选参数 | 解释 |
+| -------- | ---- |
+| --resume  str         |导入best-model      |
+|--des-root  str |将高于设定阈值的模糊图片复制到的目标文件夹 |
+|--blur-threshold float |模糊阈值，默认为0.95 |
 
