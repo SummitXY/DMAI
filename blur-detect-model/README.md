@@ -46,7 +46,7 @@
 | 网络结构     | 单残差快; out-features = 128 |
 | 验证集精度   | 86.65%        |
 | 输入图片大小 | 3 × 144 × 176 |
-| 输入图片存储格式             |![img](/home/dm/Desktop/blurModelForZhaohui/README_IMAGE/structure.png)               |
+| 输入图片存储格式             |![img](https://github.com/SummitXY/DMAI/blob/master/blur-detect-model/README_IMAGE/structure.png)               |
 | 处理形式             |将高于设定阈值的模糊图片复制到指定文件夹               |
 
 `filter.sh`可选参数：
